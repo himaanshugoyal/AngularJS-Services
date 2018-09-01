@@ -30,11 +30,17 @@
 
     });
     // angular automatically appends provider
-    app.config(function(booksProvider, constants){
-
+    // We cannot inject value service, factory service and service service in the config
+    // We can only inject the provider for the service or only the constant service
+    // Angular create underline providers for us the services we define, but we generally use the other services
+    // just to demonstrate above point so we can inject dataServiceProvider
+    app.config(function(booksProvider, constants, dataServiceProvider){
+        
        booksProvider.setIncludeVersionInTitle(false);
 
        console.log('title from constants service: ' + constants.APP_TITLE);
+
+       console.log(dataServiceProvider.$get);
     });
 
 }());
