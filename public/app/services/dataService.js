@@ -9,10 +9,10 @@
     */
     angular
         .module('app')
-        .factory('dataService', dataService);
+        .factory('dataService',['$q', '$timeout','logger', dataService ]);
 
     /** @ngInject */
-    function dataService(logger){
+    function dataService($q, $timeout, logger){
 
        return {
            // Reference Function
@@ -22,7 +22,7 @@
 
        function getAllBooks(){
            logger.output('getting all books');
-        return [
+        var booksArray = [
             {
                 book_id: 1,
                 title: 'Harry Potter and the Deathly Hallows',
@@ -42,10 +42,30 @@
                 yearPublished: 1963
             }
         ];
+
+        var deferred = $q.defer();
+        //deferred object can send resolve/reject and also during the execution is going on.
+
+        $timeout(function() {
+            var successful = true;
+
+            if(successful) {
+                // This is to provide some indication during the status of the work.
+                deferred.notify('Just getting started gathering books...');
+                deferred.notify('Almost done gathering books...');
+
+                // when the assigned service has resulted data in success.
+                deferred.resolve(booksArray);
+            } else {
+                deferred.reject('Error retreiveing books.');
+            }
+        },1000);
+
+        return deferred.promise;
        }
 
        function getAllReaders () {
-        logger.output('getting all readers');
+       // logger.output('getting all readers');
         return [
             {
                 reader_id: 1,
@@ -69,6 +89,6 @@
        }
     }
 
-    dataService.$inject = ['logger'];
+   // dataService.$inject = ['logger'];
 
 }());
