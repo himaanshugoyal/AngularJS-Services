@@ -11,14 +11,20 @@
         vm.appName = books.appName;
 
        dataService.getAllBooks()
-       .then(getBooksSuccess, getBooksError, getBooksNotifcation);
+       .then(getBooksSuccess, null, getBooksNotifcation)
+       .catch(errorCallBack);
 
         function getBooksSuccess(books){
+            throw 'error in success handler';
             vm.allBooks = books;
         }
 
-        function getBooksError(reason ){
-            console.log(reason);
+        // function getBooksError(reason ){
+        //     console.log(reason);
+        // }
+
+        function errorCallBack (errorMsg) {
+            console.log("ErrorMessage: " + errorMsg);
         }
 
         function getBooksNotifcation(notification){
