@@ -66,7 +66,7 @@
 
        function getAllReaders () {
        // logger.output('getting all readers');
-        return [
+        var readersArray = [
             {
                 reader_id: 1,
                 name: 'Marie',
@@ -86,7 +86,17 @@
                 totalMinutesRead: 600
             }
         ];
+        var deferred = $q.defer();
+        //deferred object can send resolve/reject and also during the execution is going on.
+
+        $timeout(function() {
+
+                deferred.resolve(readersArray);
+        },1500);
+
+        return deferred.promise;
        }
+       
     }
 
    // dataService.$inject = ['logger'];
