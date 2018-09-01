@@ -3,7 +3,7 @@
     var app = angular.module('app', []);
 
      // Provider function is also exposed as a module object and its not mandatory to inject in config and then use it.
-    app.provider('books', function (constants) {
+    app.provider('books',['constants', function (constants) {
 
         // Every provider must have a property $get
         // $get contains the function that will be executing the service for us.
@@ -28,19 +28,19 @@
             includeVersionInTitle = value;
         };
 
-    });
+    }]);
     // angular automatically appends provider
     // We cannot inject value service, factory service and service service in the config
     // We can only inject the provider for the service or only the constant service
     // Angular create underline providers for us the services we define, but we generally use the other services
     // just to demonstrate above point so we can inject dataServiceProvider
-    app.config(function(booksProvider, constants, dataServiceProvider){
+    app.config(['booksProvider', 'constants', 'dataServiceProvider', function(booksProvider, constants, dataServiceProvider){
         
        booksProvider.setIncludeVersionInTitle(false);
 
        console.log('title from constants service: ' + constants.APP_TITLE);
 
        console.log(dataServiceProvider.$get);
-    });
+    }]);
 
 }());
