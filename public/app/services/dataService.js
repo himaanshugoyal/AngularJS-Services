@@ -12,7 +12,7 @@
         .factory('dataService', dataService);
 
     /** @ngInject */
-    function dataService(){
+    function dataService(logger){
 
        return {
            // Reference Function
@@ -21,6 +21,7 @@
        };
 
        function getAllBooks(){
+           logger.output('getting all books');
         return [
             {
                 book_id: 1,
@@ -44,6 +45,7 @@
        }
 
        function getAllReaders () {
+        logger.output('getting all readers');
         return [
             {
                 reader_id: 1,
@@ -66,5 +68,7 @@
         ];
        }
     }
+
+    dataService.$inject = ['logger'];
 
 }());

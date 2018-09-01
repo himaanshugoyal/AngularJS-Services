@@ -1,7 +1,7 @@
 (function() {
 
     var app = angular.module('app', []);
-
+    
      // Provider function is also exposed as a module object and its not mandatory to inject in config and then use it.
     app.provider('books',['constants', function (constants) {
 
