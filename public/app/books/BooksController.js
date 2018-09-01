@@ -1,7 +1,7 @@
 (function() {
 
     angular.module('app')
-        .controller('BooksController',['books', 'dataService', 'logger', 'badgeService',BooksController ] );
+        .controller('BooksController',['books', 'dataService', 'logger', 'badgeService','$q',BooksController ] );
 
 
     function BooksController(books, dataService,logger, badgeService) {
@@ -9,6 +9,29 @@
         var vm = this;
 
         vm.appName = books.appName;
+
+         /*
+        The following section of code performs the same function as the larger section
+        below, but waits until both promises are resolved before processing the results.
+        It was demonstrated in the module, so I'm leaving it here as a reference.
+         */
+        /*
+        var booksPromise = dataService.getAllBooks();
+        var readersPromise = dataService.getAllReaders();
+
+        $q.all([booksPromise, readersPromise])
+            .then(getAllDataSuccess)
+            .catch(getAllDataError);
+
+        function getAllDataSuccess(dataArray) {
+            vm.allBooks = dataArray[0];
+            vm.allReaders = dataArray[1];
+        }
+
+        function getAllDataError(reason) {
+            console.log(reason);
+        }
+        */
 
        dataService.getAllBooks()
        .then(getBooksSuccess, null, getBooksNotifcation)
