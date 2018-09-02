@@ -12,12 +12,6 @@
         "year_published": "1990"
     },
     {
-        "book_id": 3,
-        "title": "Invisible Man",
-        "author": "Ralph Ellison",
-        "year_published": "1952"
-    },
-    {
         "book_id": 57,
         "title": "Advanced OS X Programming",
         "author": "Mark Dalrymple",
