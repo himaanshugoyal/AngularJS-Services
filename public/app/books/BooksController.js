@@ -1,7 +1,7 @@
 (function() {
   angular
     .module("app")
-    .controller('BooksController', [
+    .controller("BooksController", [
       "books",
       "dataService",
       "logger",
@@ -10,10 +10,21 @@
       "$cookies",
       "$cookieStore",
       "$log",
+      "$route",
       BooksController
     ]);
 
-  function BooksController(books, dataService, logger, badgeService, $q, $cookies, $cookieStore, $log) {
+  function BooksController(
+    books,
+    dataService,
+    logger,
+    badgeService,
+    $q,
+    $cookies,
+    $cookieStore,
+    $log,
+    $route
+  ) {
     // vm = viewmodel
     var vm = this;
 
@@ -47,7 +58,7 @@
       .then(getBooksSuccess, null, getBooksNotifcation)
       .catch(errorCallBack)
       .finally(getAllBooksComplete);
-      
+
     function getBooksSuccess(books) {
       vm.allBooks = books;
     }
@@ -89,15 +100,31 @@
 
     vm.favoriteBook = $cookies.favoriteBook;
 
-    vm.lastEdited = $cookieStore.get('lastEdited');
+    vm.lastEdited = $cookieStore.get("lastEdited");
 
-    $log.log('logging with log');
-    $log.info('logging with info');
-    $log.warn('logging with warn');
-    $log.debug('logging with debug');
-    $log.error('logging with error');
-    
-   
+    //Delete Book
+    vm.deleteBook = function(bookID) {
+      dataService
+        .deleteBook(bookID)
+        .then(deleteBookSuccess)
+        .catch(deleteBookError);
+    };
+
+    function deleteBookSuccess(message) {
+      $log.info(message);
+      $route.reload();
+    }
+
+    function deleteBookError(errorMessage) {
+      $log.error(errorMessage);
+    }
+
+    // $log.log('logging with log');
+    // $log.info('logging with info');
+    // $log.warn('logging with warn');
+    // $log.debug('logging with debug');
+    // $log.error('logging with error');
+
     //logger.output("BooksController has been create");
   }
 })();

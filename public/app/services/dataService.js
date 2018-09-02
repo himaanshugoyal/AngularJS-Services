@@ -26,7 +26,8 @@
       getAllReaders: getAllReaders,
       getBookByID: getBookByID,
       updateBook: updateBook,
-      addBook: addBook
+      addBook: addBook,
+      deleteBook: deleteBook
     };
 
     function getAllBooks() {
@@ -98,6 +99,31 @@
         "Error adding book. (HTTP status: " + response.status + ")"
       );
     }
+
+    // Delete Book
+
+    function deleteBook(bookID) {
+
+      return $http({
+          method: 'DELETE',
+          url: 'api/books/' + bookID
+      })
+          .then(deleteBookSuccess)
+          .catch(deleteBookError);
+
+  }
+
+  function deleteBookSuccess(response) {
+
+      return 'Book deleted.';
+
+  }
+
+  function deleteBookError(response) {
+
+      return $q.reject('Error deleting book. (HTTP status: ' + response.status + ')');
+
+  }
 
     function getAllReaders() {
       // logger.output('getting all readers');
