@@ -26,6 +26,6 @@
         $cookies.favoriteBook = vm.currentBook.title;
     }
 
-    $cookieStore.put('lastEdited', vm.currentBook);
+   $cookieStore.put('lastEdited', vm.currentBook);
   }
 })();

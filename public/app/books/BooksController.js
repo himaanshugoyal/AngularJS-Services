@@ -1,7 +1,7 @@
 (function() {
   angular
     .module("app")
-    .controller("BooksController", [
+    .controller('BooksController', [
       "books",
       "dataService",
       "logger",
@@ -9,10 +9,11 @@
       "$q",
       "$cookies",
       "$cookieStore",
+      "$log",
       BooksController
     ]);
 
-  function BooksController(books, dataService, logger, badgeService, $cookies, $cookieStore) {
+  function BooksController(books, dataService, logger, badgeService, $q, $cookies, $cookieStore, $log) {
     // vm = viewmodel
     var vm = this;
 
@@ -87,8 +88,15 @@
 
     vm.favoriteBook = $cookies.favoriteBook;
 
-    vm.lastEdited = JSON.parse($cookieStore.lastEdited);
+    vm.lastEdited = $cookieStore.get('lastEdited');
+
+    $log.log('logging with log');
+    $log.info('logging with info');
+    $log.warn('logging with warn');
+    $log.debug('logging with debug');
+    $log.error('logging with error');
     
+   
     //logger.output("BooksController has been create");
   }
 })();

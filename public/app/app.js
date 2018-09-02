@@ -34,9 +34,10 @@
     // We can only inject the provider for the service or only the constant service
     // Angular create underline providers for us the services we define, but we generally use the other services
     // just to demonstrate above point so we can inject dataServiceProvider
-    app.config(['booksProvider', '$routeProvider', function(booksProvider, $routeProvider){
+    app.config(['booksProvider', '$routeProvider', '$logProvider', function(booksProvider, $routeProvider,$logProvider){
         
        booksProvider.setIncludeVersionInTitle(false);
+    $logProvider.debugEnabled(true);
 
        $routeProvider
        .when('/', {
