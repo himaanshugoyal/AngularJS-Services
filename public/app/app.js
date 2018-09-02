@@ -55,12 +55,12 @@
         controller: 'EditBookController',
         controllerAs: 'bookEditor',
         // angular will wait till the dependcies are resolve before moving to the new route.
-        resolve: {
-            books: function (dataService) {
-                //throw 'error getting books';
-                return dataService.getAllBooks();
-            }
-        }
+        // resolve: {
+        //     books: function (dataService) {
+        //         //throw 'error getting books';
+        //         return dataService.getAllBooks();
+        //     }
+        // }
         })
         
         .otherwise('/');

@@ -47,6 +47,7 @@
       .then(getBooksSuccess, null, getBooksNotifcation)
       .catch(errorCallBack)
       .finally(getAllBooksComplete);
+      
     function getBooksSuccess(books) {
       vm.allBooks = books;
     }
