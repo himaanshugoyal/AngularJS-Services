@@ -1,6 +1,6 @@
 (function() {
 
-    var app = angular.module('app', []);
+    var app = angular.module('app', ['ngRoute']);
     
      // Provider function is also exposed as a module object and its not mandatory to inject in config and then use it.
     app.provider('books',['constants', function (constants) {
@@ -34,13 +34,29 @@
     // We can only inject the provider for the service or only the constant service
     // Angular create underline providers for us the services we define, but we generally use the other services
     // just to demonstrate above point so we can inject dataServiceProvider
-    app.config(['booksProvider', 'constants', 'dataServiceProvider', function(booksProvider, constants, dataServiceProvider){
+    app.config(['booksProvider', '$routeProvider', function(booksProvider, $routeProvider){
         
        booksProvider.setIncludeVersionInTitle(false);
 
-       console.log('title from constants service: ' + constants.APP_TITLE);
-
-       console.log(dataServiceProvider.$get);
+       $routeProvider
+       .when('/', {
+           templateUrl: '/app/templates/books.html',
+           controller: 'BooksController',
+           controllerAs: 'books'
+       })
+       .when('/AddBook', {
+           templateUrl: '/app/templates/addBook.html',
+           controller: 'AddBookController',
+           controllerAs: 'addBook'
+       })
+       .when('/EditBook/:bookID', {
+        templateUrl: '/app/templates/editBook.html',
+        controller: 'EditBookController',
+        controllerAs: 'bookEditor',
+        })
+        .otherwise('/');
     }]);
+
+    
 
 }());
