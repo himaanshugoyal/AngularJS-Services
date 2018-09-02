@@ -36,11 +36,26 @@
         url: "api/books",
         headers: {
           "PS-BookLogger-Version": constants.APP_VERSION
-        }
+        },
+        transformResponse: transformGetBooks
       })
         .then(sendResponseData)
         .catch(sendGetBooksError);
     }
+
+    function transformGetBooks(data, headersGetter) {
+
+      var transformed = angular.fromJson(data);
+
+      transformed.forEach(function (currentValue, index, array) {
+          currentValue.dateDownloaded = new Date();
+      });
+
+      //console.log(transformed);
+      return transformed;
+
+  }
+
 
     function sendResponseData(response) {
       return response.data;
@@ -82,9 +97,17 @@
 
     function addBook(newBook) {
       return $http
-         .post("api/books", newBook)
+         .post("api/books", newBook , {
+           transformRequest: transformPostRequest
+         })
         .then(addBookSuccess)
         .catch(addBookError);
+    }
+
+    function transformPostRequest (data, headersGetter){
+      data.newBook = true;
+      console.log(data);
+      return JSON.stringify(data);
     }
 
     function addBookSuccess(response) {
