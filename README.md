@@ -14,3 +14,8 @@
    2. Abstracting Web service Details from the controller
    3. Assert control over request and responses when necessary
    4. Working with $resource
+
+4. Caching
+   1. Understanding $cacheFactory and cache objects
+   2. Caching $http Request
+   3. Using custom services to share data between controllers.
