@@ -19,8 +19,10 @@
       dataService
     ]);
 
+
+
   /** @ngInject */
-  function dataService($q, $timeout, logger, $http, constants) {
+  function dataService($q, $timeout, logger, $http, constants, $cacheFactory) {
     return {
       // Reference Function
       getAllBooks: getAllBooks,
@@ -28,12 +30,28 @@
       getBookByID: getBookByID,
       updateBook: updateBook,
       addBook: addBook,
-      deleteBook: deleteBook
+      deleteBook: deleteBook,
+      getUserSummary: getUserSummary
     };
 
     function getUserSummary() {
       var deferred = $q.defer();
 
+      var dataCache = $cacheFactory.get('bookLoggerCache');
+
+      if(!dataCache) {
+        dataCache = $cacheFactory('bookLoggerCache');
+      }
+
+      // now check if the dataCache has the summary objet
+
+      var summaryFromCache = dataCache.get('summary');
+
+      if (summaryFromCache) {
+        console.log('retruning summary form cache');
+        deferred.resolve(summaryFromCache);
+      }
+      else {
       console.log("gathering new summary data");
 
       var booksPromise = getAllBooks();
@@ -55,13 +73,26 @@
           readerCount: allReaders.length,
           grandTotalMinutes: grandTotalMinutes
         };
+
+        dataCache.put('summary', summaryData);
         // this will pass it as a parameter to the promise resolution handler in the calling controller.
         deferred.resolve(summaryData);
+
+
       });
 
       // The last line of the function ereturnes the promise associated with the deferred object.
       return deferred.promise;
     }
+
+    }
+
+    function deleteSummaryFromCache() {
+
+      var dataCache = $cacheFactory.get('bookLoggerCache');
+      dataCache.remove('summary');
+
+  }
 
     function getAllBooks() {
       return $http({
@@ -105,6 +136,8 @@
     }
 
     function updateBook(book) {
+    deleteSummaryFromCache();
+      
       return $http({
         method: "PUT",
         url: "api/books/" + book.book_id,
@@ -126,6 +159,7 @@
     // Add Book
 
     function addBook(newBook) {
+      deleteSummaryFromCache();
       return $http
         .post("api/books", newBook, {
           transformRequest: transformPostRequest
@@ -153,6 +187,7 @@
     // Delete Book
 
     function deleteBook(bookID) {
+      deleteSummaryFromCache();
       return $http({
         method: "DELETE",
         url: "api/books/" + bookID

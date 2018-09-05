@@ -55,6 +55,14 @@
         }
         */
 
+dataService.getUserSummary()
+        .then(getUserSummarySuccess);
+
+  function getUserSummarySuccess(summaryData) {
+    console.log(summaryData);
+    vm.summaryData = summaryData;
+  }
+
    /* dataService
       .getAllBooks()
       .then(getBooksSuccess, null, getBooksNotifcation)
