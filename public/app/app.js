@@ -1,6 +1,6 @@
 (function() {
 
-    var app = angular.module('app', ['ngRoute', 'ngCookies']);
+    var app = angular.module('app', ['ngRoute', 'ngCookies', 'ngResource']);
     
      // Provider function is also exposed as a module object and its not mandatory to inject in config and then use it.
     app.provider('books',['constants', function (constants) {

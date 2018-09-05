@@ -11,6 +11,7 @@
       "dataService",
       "$log",
       "$location",
+      "BooksResource",
       EditBookController
     ]);
 
@@ -21,7 +22,8 @@
     $cookieStore,
     dataService,
     $log,
-    $location
+    $location,
+    BooksResource
   ) {
     //console.log($routeParams.bookID);
 
@@ -33,10 +35,13 @@
     //   return item.book_id == $routeParams.bookID;
     // })[0];
 
-    dataService
-      .getBookByID($routeParams.bookID)
-      .then(getBookSuccess)
-      .catch(getBookError);
+    // dataService
+    //   .getBookByID($routeParams.bookID)
+    //   .then(getBookSuccess)
+    //   .catch(getBookError);
+
+    vm.currentBook = BooksResource.get({book_id: $routeParams.bookID});
+    $log.log(vm.currentBook );
 
     function getBookSuccess(book) {
       vm.currentBook = book;
@@ -52,9 +57,14 @@
     };
 
     vm.saveBook = function() {
-      dataService.updateBook(vm.currentBook)
-         .then(updateBookSuccess)
-         .catch(updateBookError);
+      // dataService.updateBook(vm.currentBook)
+      //    .then(updateBookSuccess)
+      //    .catch(updateBookError);
+
+      // because the currentBook is going to be an instance of resource, it is going to have same methods as that of instance class, except the instance methods names will be prefixed with a $ sign.
+      vm.currentBook.$update();
+      $location.path("/");
+
     };
 
     function updateBookSuccess(message) {

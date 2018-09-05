@@ -11,6 +11,7 @@
       "$cookieStore",
       "$log",
       "$route",
+      "BooksResource",
       BooksController
     ]);
 
@@ -23,7 +24,8 @@
     $cookies,
     $cookieStore,
     $log,
-    $route
+    $route,
+    BooksResource
   ) {
     // vm = viewmodel
     var vm = this;
@@ -53,11 +55,15 @@
         }
         */
 
-    dataService
+   /* dataService
       .getAllBooks()
       .then(getBooksSuccess, null, getBooksNotifcation)
       .catch(errorCallBack)
-      .finally(getAllBooksComplete);
+      .finally(getAllBooksComplete); */
+  
+      // This immediately assigns a empty object, and when data is actually returned from server,
+      // it will be updated with new values.
+      vm.allBooks = BooksResource.query();
 
     function getBooksSuccess(books) {
       vm.allBooks = books;
