@@ -15,6 +15,7 @@
       "logger",
       "$http",
       "constants",
+      "$cacheFactory",
       dataService
     ]);
 
@@ -30,6 +31,38 @@
       deleteBook: deleteBook
     };
 
+    function getUserSummary() {
+      var deferred = $q.defer();
+
+      console.log("gathering new summary data");
+
+      var booksPromise = getAllBooks();
+      var readersPromise = getAllReaders();
+
+      $q.all([booksPromise, readersPromise])
+      .then(function(bookLoggerData) {
+        var allBooks = bookLoggerData[0];
+        var allReaders = bookLoggerData[1];
+
+        var grandTotalMinutes = 0;
+
+        allReaders.forEach(function(currentReader, index, array) {
+          grandTotalMinutes += currentReader.totalMinutesRead;
+        });
+
+        var summaryData = {
+          bookCount: allBooks.length,
+          readerCount: allReaders.length,
+          grandTotalMinutes: grandTotalMinutes
+        };
+        // this will pass it as a parameter to the promise resolution handler in the calling controller.
+        deferred.resolve(summaryData);
+      });
+
+      // The last line of the function ereturnes the promise associated with the deferred object.
+      return deferred.promise;
+    }
+
     function getAllBooks() {
       return $http({
         method: "GET",
@@ -44,18 +77,15 @@
     }
 
     function transformGetBooks(data, headersGetter) {
-
       var transformed = angular.fromJson(data);
 
-      transformed.forEach(function (currentValue, index, array) {
-          currentValue.dateDownloaded = new Date();
+      transformed.forEach(function(currentValue, index, array) {
+        currentValue.dateDownloaded = new Date();
       });
 
       //console.log(transformed);
       return transformed;
-
-  }
-
+    }
 
     function sendResponseData(response) {
       return response.data;
@@ -97,14 +127,14 @@
 
     function addBook(newBook) {
       return $http
-         .post("api/books", newBook , {
-           transformRequest: transformPostRequest
-         })
+        .post("api/books", newBook, {
+          transformRequest: transformPostRequest
+        })
         .then(addBookSuccess)
         .catch(addBookError);
     }
 
-    function transformPostRequest (data, headersGetter){
+    function transformPostRequest(data, headersGetter) {
       data.newBook = true;
       console.log(data);
       return JSON.stringify(data);
@@ -123,27 +153,23 @@
     // Delete Book
 
     function deleteBook(bookID) {
-
       return $http({
-          method: 'DELETE',
-          url: 'api/books/' + bookID
+        method: "DELETE",
+        url: "api/books/" + bookID
       })
-          .then(deleteBookSuccess)
-          .catch(deleteBookError);
+        .then(deleteBookSuccess)
+        .catch(deleteBookError);
+    }
 
-  }
+    function deleteBookSuccess(response) {
+      return "Book deleted.";
+    }
 
-  function deleteBookSuccess(response) {
-
-      return 'Book deleted.';
-
-  }
-
-  function deleteBookError(response) {
-
-      return $q.reject('Error deleting book. (HTTP status: ' + response.status + ')');
-
-  }
+    function deleteBookError(response) {
+      return $q.reject(
+        "Error deleting book. (HTTP status: " + response.status + ")"
+      );
+    }
 
     function getAllReaders() {
       // logger.output('getting all readers');
